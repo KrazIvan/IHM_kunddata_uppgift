@@ -1,11 +1,14 @@
-from faker import Faker
+def kunddata_collector(filnamn):
+    with open(filnamn, 'r') as f:
+        rader = f.readlines()
+    keys = rader[0].strip().split(',')
+    dict_lista = []
+    for rad in rader[1:]:
+        values = rad.strip().split(',')
+        dict = {}
+        for i in range(len(keys)):
+            dict[keys[i]] = values[i]
+        dict_lista.append(dict)
+    return dict_lista
 
-fake = Faker(["sv_SE"])
-
-test_data = []
-for _ in range (10):
-     test_data.append(";".join([fake.name(), fake.address()]))
-
-print("\n".join(test_data))
-
-# test
+print(kunddata_collector("customers.csv"))
