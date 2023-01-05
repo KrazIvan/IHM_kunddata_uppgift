@@ -1,7 +1,7 @@
 import json
 
-def kunddata_collector(filnamn):
-    with open(filnamn, "r") as f:
+def kunddata_collector(csv_fil):
+    with open(csv_fil, "r") as f:
         rader = f.readlines()
     keys = rader[0].strip().split(",")
     dict_lista = []
