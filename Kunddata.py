@@ -1,3 +1,5 @@
+import json
+
 def kunddata_collector(filnamn):
     with open(filnamn, "r") as f:
         rader = f.readlines()
@@ -11,4 +13,15 @@ def kunddata_collector(filnamn):
         dict_lista.append(dict)
     return dict_lista
 
-print(kunddata_collector("customers.csv"))
+#print(kunddata_collector("customers.csv"))  #<--- Okommentera detta för att se resultatet.
+
+def få_topp_tre(json_fil):
+    with open(json_fil, 'r') as f:
+        json_string = f.read()
+    orderinfo = json.loads(json_string)
+    amounts = [customer_data['totalAmount'] for customer_id, customer_data in orderinfo.items()]
+    amounts.sort(reverse=True)
+    
+    return amounts[:3]
+
+#print(få_topp_tre("orders.json"))  #<--- Okommentera detta för att se resultatet.
