@@ -11,7 +11,7 @@ def kunddata_collector(csv_fil):
         for i in range(len(keys)):
             dict[keys[i]] = values[i]
         dict_lista.append(dict)
-    return dict_lista
+    return dict_lista # retunerar en dict.
 
 # print(kunddata_collector("customers.csv"))  #<--- Okommentera detta för att se resultatet.
 
