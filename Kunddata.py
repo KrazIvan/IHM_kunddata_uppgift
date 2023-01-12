@@ -18,13 +18,24 @@ def kunddata_collector(csv_fil):
 
 #print(kunddata_collector("customers.csv"))  #<--- Okommentera detta för att se resultatet.
 
-def få_topp_tre(json_fil):
+def intkollaren(val):
+    try:
+        int(val)
+        return True
+    except ValueError:
+        return False
+
+def få_vips(json_fil):
+    vip_list_size = input("Hur många köpare vill du se? ")
+    while not intkollaren(vip_list_size):
+        print("Det där är inte ett giltigt tal. Prova igen.")
+        vip_list_size = input("Hur många köpare vill du se? ")
     with open(json_fil, 'r') as f:
         json_string = f.read()
     orderinfo = json.loads(json_string)
     amounts = {customer_data["CustomerNumber"]: customer_data['totalAmount'] for customer_id, customer_data in orderinfo.items()}
     sorted_amounts = sorted(amounts.items(), key=lambda x:x[1], reverse=True)
-    toppdict = dict(sorted_amounts[:3])
+    toppdict = dict(sorted_amounts[:int(vip_list_size)])
     vip_customer_numbers = list(toppdict.keys())
     return [d for d in kunddata_collector(csv_fil) if int(d["CustomerNumber"]) in vip_customer_numbers]
 
@@ -32,4 +43,4 @@ def vip_printer(vips):
     for d in vips:
         print(d)
 
-vip_printer(få_topp_tre(json_fil))  #<--- Okommentera detta för att se resultatet.
+vip_printer(få_vips(json_fil))  #<--- Okommentera detta för att se resultatet.
