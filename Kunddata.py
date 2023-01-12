@@ -1,5 +1,8 @@
 import json
 
+csv_fil = "customers.csv"
+json_fil = "orders.json"
+
 def kunddata_collector(csv_fil):
     with open(csv_fil, "r") as f: # 'r' betyder att man läser in filen.
         rader = f.readlines()
@@ -13,15 +16,20 @@ def kunddata_collector(csv_fil):
         dict_lista.append(dict)
     return dict_lista # retunerar en dict.
 
-# print(kunddata_collector("customers.csv"))  #<--- Okommentera detta för att se resultatet.
+#print(kunddata_collector("customers.csv"))  #<--- Okommentera detta för att se resultatet.
 
 def få_topp_tre(json_fil):
     with open(json_fil, 'r') as f:
         json_string = f.read()
     orderinfo = json.loads(json_string)
-    amounts = [customer_data['totalAmount'] for customer_id, customer_data in orderinfo.items()]
-    amounts.sort(reverse=True) # Sorterar i omvänd ordning för att få det som har handlat för mest först.
-    
-    return amounts[:3] # Väljer ut de tre som har handlat för mest.
+    amounts = {customer_data["CustomerNumber"]: customer_data['totalAmount'] for customer_id, customer_data in orderinfo.items()}
+    sorted_amounts = sorted(amounts.items(), key=lambda x:x[1], reverse=True)
+    toppdict = dict(sorted_amounts[:3])
+    vip_customer_numbers = list(toppdict.keys())
+    return [d for d in kunddata_collector(csv_fil) if int(d["CustomerNumber"]) in vip_customer_numbers]
 
-print(få_topp_tre("orders.json"))  #<--- Okommentera detta för att se resultatet.
+def vip_printer(vips):
+    for d in vips:
+        print(d)
+
+vip_printer(få_topp_tre(json_fil))  #<--- Okommentera detta för att se resultatet.
