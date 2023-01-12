@@ -1,3 +1,4 @@
+from collections import defaultdict
 import json
 
 csv_fil = "customers.csv"
@@ -43,4 +44,31 @@ def vip_printer(vips):
     for d in vips:
         print(d)
 
-vip_printer(få_vips(json_fil))  #<--- Okommentera detta för att se resultatet.
+#vip_printer(få_vips(json_fil))  #<--- Okommentera detta för att se resultatet.
+
+
+def bästa_säljare(json_fil):
+    bästa_säljare_list_size = input("Hur lång ska listan vara? ")
+    while not intkollaren(bästa_säljare_list_size):
+        print("Det där är inte ett giltigt tal. Prova igen.")
+        bästa_säljare_list_size = input("Hur lång ska listan vara?  ")
+    with open(json_fil) as json_fil:
+        säljdata = json.load(json_fil)
+    item_data = defaultdict(lambda: {"antal_köp": 0, "inkomst": 0.0})
+    for kundnummer, kunddata in säljdata.items():
+        for order in kunddata["orders"]:
+            for item in order["items"]:
+                item_data[item["ean"]]["antal_köp"] += 1
+                item_data[item["ean"]]["inkomst"] += item["price"]
+
+    sorted_items = sorted(item_data.items(), key=lambda x: x[1]["antal_köp"] * x[1]["inkomst"], reverse=True)
+    bästsäljande = sorted_items[:int(bästa_säljare_list_size)]
+    return bästsäljande
+
+def bästsäljande_printer(bästsäljande):
+    plats = 1
+    for item in bästsäljande:
+        print(f"Nummmer {plats} bästsäljande är ean: {item[0]}")
+        plats += 1
+
+bästsäljande_printer(bästa_säljare(json_fil))
