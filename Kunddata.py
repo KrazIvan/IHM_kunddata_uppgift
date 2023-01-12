@@ -31,20 +31,20 @@ def få_vips(json_fil):
     while not intkollaren(vip_list_size):
         print("Det där är inte ett giltigt tal. Prova igen.")
         vip_list_size = input("Hur många köpare vill du se? ")
-    with open(json_fil, 'r') as f:
+    with open(json_fil, "r") as f:
         json_string = f.read()
     orderinfo = json.loads(json_string)
-    amounts = {customer_data["CustomerNumber"]: customer_data['totalAmount'] for customer_id, customer_data in orderinfo.items()}
+    amounts = {customer_data["CustomerNumber"]: customer_data["totalAmount"] for customer_id, customer_data in orderinfo.items()}
     sorted_amounts = sorted(amounts.items(), key=lambda x:x[1], reverse=True)
     toppdict = dict(sorted_amounts[:int(vip_list_size)])
     vip_customer_numbers = list(toppdict.keys())
     return [d for d in kunddata_collector(csv_fil) if int(d["CustomerNumber"]) in vip_customer_numbers]
 
-def vip_printer(vips):
+def kund_printer(vips):
     for d in vips:
         print(d)
 
-#vip_printer(få_vips(json_fil))  #<--- Okommentera detta för att se resultatet.
+#kund_printer(få_vips(json_fil))  #<--- Okommentera detta för att se resultatet.
 
 
 def bästa_säljare(json_fil):
@@ -71,4 +71,29 @@ def bästsäljande_printer(bästsäljande):
         print(f"Nummmer {plats} bästsäljande är ean: {item[0]}")
         plats += 1
 
-bästsäljande_printer(bästa_säljare(json_fil))
+#bästsäljande_printer(bästa_säljare(json_fil))   #<--- Okommentera detta för att se resultatet.
+
+def minst_aktiva_kunder(json_fil):
+    minst_aktiv_kund_lista_storlek = input("Hur lång ska listan vara? ")
+    while not intkollaren(minst_aktiv_kund_lista_storlek):
+        print("Det där är inte ett giltigt tal. Prova igen.")
+        minst_aktiv_kund_lista_storlek = input("Hur lång ska listan vara?  ")
+    with open(json_fil, "r") as f:
+        json_string = f.read()
+    säljdata = json.loads(json_string)
+    kunddata = defaultdict(lambda: {"purchases": 0})
+    for kundnummer, kund in säljdata.items():
+        kunddata[kundnummer]["purchases"] = len(kund["orders"])
+    sorterade_kunder = sorted(kunddata.items(), key=lambda x: x[1]["purchases"])
+    töntnummer = [kund[0] for kund in sorterade_kunder[:int(minst_aktiv_kund_lista_storlek)]]
+    return [d for d in kunddata_collector(csv_fil) if str(d["CustomerNumber"]) in töntnummer]
+
+#kund_printer(minst_aktiva_kunder(json_fil))   #<--- Okommentera detta för att se resultatet.
+
+def kolla_upp_kund(kundnummer):
+    for kund in kunddata_collector(csv_fil):
+        if kund.get("CustomerNumber") == kundnummer:
+            return kund
+    return {}
+
+print(kolla_upp_kund("10004"))
