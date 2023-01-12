@@ -40,8 +40,8 @@ def få_vips(json_fil):
     vip_customer_numbers = list(toppdict.keys())
     return [d for d in kunddata_collector(csv_fil) if int(d["CustomerNumber"]) in vip_customer_numbers]
 
-def kund_printer(vips):
-    for d in vips:
+def kund_printer(kunder):
+    for d in kunder:
         print(d)
 
 #kund_printer(få_vips(json_fil))  #<--- Okommentera detta för att se resultatet.
