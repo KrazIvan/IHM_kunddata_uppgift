@@ -96,4 +96,7 @@ def kolla_upp_kund(kundnummer):
             return kund
     return {}
 
-print(kolla_upp_kund("10004"))
+#print(kolla_upp_kund("10004"))   #<--- Okommentera detta för att se resultatet.
+
+def main(): # Börja skriva programmet (med while-loopen) här.
+    pass
