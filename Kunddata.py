@@ -1,11 +1,11 @@
 from collections import defaultdict
 import json
 
-csv_fil = "customers.csv"
-json_fil = "orders.json"
+#csv_fil = "customers.csv"
+#json_fil = "orders.json"
 
 def kunddata_collector(csv_fil):
-    with open(csv_fil, "r") as f: # 'r' betyder att man läser in filen.
+    with open(csv_fil, "r") as f:
         rader = f.readlines()
     keys = rader[0].strip().split(",")
     dict_lista = []
@@ -15,7 +15,7 @@ def kunddata_collector(csv_fil):
         for i in range(len(keys)):
             dict[keys[i]] = values[i]
         dict_lista.append(dict)
-    return dict_lista # retunerar en dict.
+    return dict_lista
 
 #print(kunddata_collector("customers.csv"))  #<--- Okommentera detta för att se resultatet.
 
@@ -24,6 +24,22 @@ def intkollaren(val):
         int(val)
         return True
     except ValueError:
+        return False
+
+def unicodekollaren(fil):
+    try:
+        with open(fil, "r") as f:
+            rader = f.readlines()
+            rader[0].strip().split(",")
+            return True
+    except UnicodeDecodeError:
+        return False
+
+def filexistanskollaren(fil):
+    try: 
+        open(fil, "r")
+        return True
+    except FileNotFoundError:
         return False
 
 def få_vips(json_fil):
@@ -98,5 +114,36 @@ def kolla_upp_kund(kundnummer):
 
 #print(kolla_upp_kund("10004"))   #<--- Okommentera detta för att se resultatet.
 
-def main(): # Börja skriva programmet (med while-loopen) här.
-    pass
+
+def main():
+    csv_fil = input("Ange csv-filen, eller ange \"d\" för att använda customers.csv")
+    if csv_fil == "d" or csv_fil == "D":
+            csv_fil = "customers.csv"
+    while not filexistanskollaren(csv_fil) or not unicodekollaren(csv_fil):
+        if csv_fil == "d" or csv_fil == "D":
+            csv_fil = "customers.csv"
+            break
+        if not filexistanskollaren(csv_fil):
+            print("Den här filen finns inte.")
+            csv_fil = input("Ange csv-filen.")
+            continue
+        if not unicodekollaren(csv_fil):
+            print("Den här filen kan inte användas.")
+            csv_fil = input("Ange csv-filen.")
+            continue
+    json_fil = input("Ange json-filen, eller ange \"d\" för att använda orders.json")
+    if json_fil == "d" or json_fil == "D":
+            json_fil = "orders.json"
+    while not filexistanskollaren(json_fil) or not unicodekollaren(json_fil):
+        if not filexistanskollaren(json_fil):
+            print("Den här filen finns inte.")
+            json_fil = input("Ange json-filen.")
+            continue
+        if not unicodekollaren(json_fil):
+            print("Den här filen kan inte användas.")
+            json_fil = input("Ange json-filen.")
+            continue
+
+
+if __name__ == '__main__':
+    main()
