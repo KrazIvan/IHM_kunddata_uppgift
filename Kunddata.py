@@ -120,9 +120,6 @@ def main():
     if csv_fil == "d" or csv_fil == "D":
             csv_fil = "customers.csv"
     while not filexistanskollaren(csv_fil) or not unicodekollaren(csv_fil):
-        if csv_fil == "d" or csv_fil == "D":
-            csv_fil = "customers.csv"
-            break
         if not filexistanskollaren(csv_fil):
             print("Den här filen finns inte.")
             csv_fil = input("Ange csv-filen.")
