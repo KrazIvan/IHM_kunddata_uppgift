@@ -116,6 +116,7 @@ def kolla_upp_kund(kundnummer):
 
 
 def main():
+    global csv_fil
     csv_fil = input("Ange csv-filen, eller ange \"d\" för att använda customers.csv")
     if csv_fil == "d" or csv_fil == "D":
             csv_fil = "customers.csv"
@@ -128,6 +129,7 @@ def main():
             print("Den här filen kan inte användas.")
             csv_fil = input("Ange csv-filen.")
             continue
+    global json_fil
     json_fil = input("Ange json-filen, eller ange \"d\" för att använda orders.json")
     if json_fil == "d" or json_fil == "D":
             json_fil = "orders.json"
@@ -140,7 +142,9 @@ def main():
             print("Den här filen kan inte användas.")
             json_fil = input("Ange json-filen.")
             continue
-
+    meny = input("\n\nHallå och välkommen!\n\nVad vill du göra?\n1. Se toppköpare.\n2. Se bästsäljade produkter.\n3. Kolla up en kund.\n4. Se de minst aktiva kunderna.\nq. För att avsluta programmet.\n\n").replace(" ", "").replace(".","").lower()
+    while not (meny == "1") and (meny != "2") and not (meny == "3") and (meny != "4") and not (meny == "q"):
+        meny = input("Ogiltig begäran.\nAnge \"1\", \"2\", \"3\", \"4\" för att välja, eller \"q\" för att avsluta.\n\nVad vill du göra?\n1. Se toppköpare.\n2. Se bästsäljade produkter.\n3. Kolla up en kund.\n4. Se de minst aktiva kunderna.\nq. För att avsluta programmet.\n\n").replace(" ", "").replace(".","").lower()
 
 if __name__ == '__main__':
     main()
