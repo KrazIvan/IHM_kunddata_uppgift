@@ -1,8 +1,8 @@
 from collections import defaultdict
 import json
 
-#csv_fil = "customers.csv"
-#json_fil = "orders.json"
+csv_fil = "customers.csv"
+json_fil = "orders.json"
 
 def kunddata_collector(csv_fil):
     with open(csv_fil, "r") as f:
@@ -57,6 +57,7 @@ def få_vips(json_fil):
     return [d for d in kunddata_collector(csv_fil) if int(d["CustomerNumber"]) in vip_customer_numbers]
 
 def kund_printer(kunder):
+    print("\n")
     for d in kunder:
         print(d)
 
@@ -83,6 +84,7 @@ def bästa_säljare(json_fil):
 
 def bästsäljande_printer(bästsäljande):
     plats = 1
+    print("\n")
     for item in bästsäljande:
         print(f"Nummmer {plats} bästsäljande är ean: {item[0]}")
         plats += 1
@@ -115,36 +117,65 @@ def kolla_upp_kund(kundnummer):
 #print(kolla_upp_kund("10004"))   #<--- Okommentera detta för att se resultatet.
 
 
+def meny():
+    meny_input = input("\n1. Se toppköpare.\n2. Se bästsäljade produkter."+
+    "\n3. Kolla up en kund.\n4. Se de minst aktiva kunderna.\nq. För att avsluta programmet.\n\n").replace(" ", "").replace(".","").lower()
+    while not (meny_input == "1") and (meny_input != "2") and not (meny_input == "3") and (meny_input != "4") and not (meny_input == "q"):
+        meny_input = input("Ogiltig begäran.\nAnge \"1\", \"2\", \"3\", \"4\" för att välja, eller"+
+        "\"q\" för att avsluta.\n\nVad vill du göra?\n1. Se toppköpare.\n2. Se bästsäljade produkter."+
+        "\n3. Kolla up en kund.\n4. Se de minst aktiva kunderna.\nq. För att avsluta programmet.\n\n").replace(" ", "").replace(".","").lower()
+    match meny_input:
+        case "1":
+            kund_printer(få_vips(json_fil))
+        case "2":
+            bästsäljande_printer(bästa_säljare(json_fil))
+        case "3":
+            kundnummer = input("\nAnge nummeret på kunden som du vill kolla upp. ")
+            if kolla_upp_kund(kundnummer) == {}:
+                print("\nDet finns ingen kund som har det här nummeret.\n")
+            else:
+                for key, value in kolla_upp_kund(kundnummer).items():
+                    print(f"\n\{key}: {value}\n")
+        case "4":
+            kund_printer(minst_aktiva_kunder(json_fil))
+        case "q":
+            print("\nProgrammet avslutas...\n")
+            quit()
+    print("\n\nVad vill du göra nu?")
+    meny()
+
+
 def main():
     global csv_fil
-    csv_fil = input("Ange csv-filen, eller ange \"d\" för att använda customers.csv")
+    csv_fil = input("Ange csv-filen, eller ange \"d\" för att använda customers.csv ")
     if csv_fil == "d" or csv_fil == "D":
             csv_fil = "customers.csv"
     while not filexistanskollaren(csv_fil) or not unicodekollaren(csv_fil):
         if not filexistanskollaren(csv_fil):
             print("Den här filen finns inte.")
-            csv_fil = input("Ange csv-filen.")
+            csv_fil = input("Ange csv-filen. ")
             continue
         if not unicodekollaren(csv_fil):
             print("Den här filen kan inte användas.")
-            csv_fil = input("Ange csv-filen.")
+            csv_fil = input("Ange csv-filen. ")
             continue
     global json_fil
-    json_fil = input("Ange json-filen, eller ange \"d\" för att använda orders.json")
+    json_fil = input("Ange json-filen, eller ange \"d\" för att använda orders.json. ")
     if json_fil == "d" or json_fil == "D":
             json_fil = "orders.json"
     while not filexistanskollaren(json_fil) or not unicodekollaren(json_fil):
         if not filexistanskollaren(json_fil):
             print("Den här filen finns inte.")
-            json_fil = input("Ange json-filen.")
+            json_fil = input("Ange json-filen. ")
             continue
         if not unicodekollaren(json_fil):
             print("Den här filen kan inte användas.")
-            json_fil = input("Ange json-filen.")
+            json_fil = input("Ange json-filen. ")
             continue
-    meny = input("\n\nHallå och välkommen!\n\nVad vill du göra?\n1. Se toppköpare.\n2. Se bästsäljade produkter.\n3. Kolla up en kund.\n4. Se de minst aktiva kunderna.\nq. För att avsluta programmet.\n\n").replace(" ", "").replace(".","").lower()
-    while not (meny == "1") and (meny != "2") and not (meny == "3") and (meny != "4") and not (meny == "q"):
-        meny = input("Ogiltig begäran.\nAnge \"1\", \"2\", \"3\", \"4\" för att välja, eller \"q\" för att avsluta.\n\nVad vill du göra?\n1. Se toppköpare.\n2. Se bästsäljade produkter.\n3. Kolla up en kund.\n4. Se de minst aktiva kunderna.\nq. För att avsluta programmet.\n\n").replace(" ", "").replace(".","").lower()
+    print("\n\nHallå och välkommen!")
+    print("\nVad vill du göra?")
+    meny()
+
 
 if __name__ == '__main__':
     main()
