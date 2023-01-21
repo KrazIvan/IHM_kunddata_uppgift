@@ -152,11 +152,11 @@ def main():
             csv_fil = "customers.csv"
     while not filexistanskollaren(csv_fil) or not unicodekollaren(csv_fil):
         if not filexistanskollaren(csv_fil):
-            print("Den här filen finns inte.")
+            print("\nDen här filen finns inte.\n")
             csv_fil = input("Ange csv-filen. ")
             continue
         if not unicodekollaren(csv_fil):
-            print("Den här filen kan inte användas.")
+            print("\nDen här filen kan inte användas.\n")
             csv_fil = input("Ange csv-filen. ")
             continue
     global json_fil
@@ -165,11 +165,11 @@ def main():
             json_fil = "orders.json"
     while not filexistanskollaren(json_fil) or not unicodekollaren(json_fil):
         if not filexistanskollaren(json_fil):
-            print("Den här filen finns inte.")
+            print("\nDen här filen finns inte.\n")
             json_fil = input("Ange json-filen. ")
             continue
         if not unicodekollaren(json_fil):
-            print("Den här filen kan inte användas.")
+            print("\nDen här filen kan inte användas.\n")
             json_fil = input("Ange json-filen. ")
             continue
     print("\n\nHallå och välkommen!")
