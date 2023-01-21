@@ -134,8 +134,9 @@ def meny():
             if kolla_upp_kund(kundnummer) == {}:
                 print("\nDet finns ingen kund som har det här nummeret.\n")
             else:
+                print("\n")
                 for key, value in kolla_upp_kund(kundnummer).items():
-                    print(f"\n\{key}: {value}\n")
+                    print(f"{key}: {value}")
         case "4":
             print("\n")
             kund_printer(minst_aktiva_kunder(json_fil))
