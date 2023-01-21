@@ -57,7 +57,6 @@ def få_vips(json_fil):
     return [d for d in kunddata_collector(csv_fil) if int(d["CustomerNumber"]) in vip_customer_numbers]
 
 def kund_printer(kunder):
-    print("\n")
     for d in kunder:
         print(d)
 
@@ -84,7 +83,6 @@ def bästa_säljare(json_fil):
 
 def bästsäljande_printer(bästsäljande):
     plats = 1
-    print("\n")
     for item in bästsäljande:
         print(f"Nummmer {plats} bästsäljande är ean: {item[0]}")
         plats += 1
@@ -126,8 +124,10 @@ def meny():
         "\n3. Kolla up en kund.\n4. Se de minst aktiva kunderna.\nq. För att avsluta programmet.\n\n").replace(" ", "").replace(".","").lower()
     match meny_input:
         case "1":
+            print("\n")
             kund_printer(få_vips(json_fil))
         case "2":
+            print("\n")
             bästsäljande_printer(bästa_säljare(json_fil))
         case "3":
             kundnummer = input("\nAnge nummeret på kunden som du vill kolla upp. ")
@@ -137,6 +137,7 @@ def meny():
                 for key, value in kolla_upp_kund(kundnummer).items():
                     print(f"\n\{key}: {value}\n")
         case "4":
+            print("\n")
             kund_printer(minst_aktiva_kunder(json_fil))
         case "q":
             print("\nProgrammet avslutas...\n")
