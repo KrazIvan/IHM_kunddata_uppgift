@@ -1,9 +1,6 @@
 from collections import defaultdict
 import json
 
-csv_fil = "customers.csv"
-json_fil = "orders.json"
-
 def kunddata_collector(csv_fil):
     with open(csv_fil, "r") as f:
         rader = f.readlines()
