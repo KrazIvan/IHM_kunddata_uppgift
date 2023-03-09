@@ -1,4 +1,4 @@
-"Record ID","FirstName","LastLame","Email","CreateDate","CompanyName","BuyingRole","BuyingRoleOption","MobilePhone Number","Additionalemail addresses"
+"RecordID","FirstName","LastLame","Email","CreateDate","CompanyName","BuyingRole","BuyingRoleOption","MobilePhoneNumber","AdditionalEmailAddresses"
 "1901","Bryan","Cooper","bcooper@biglytics.net","2023-02-14 15:53","Biglytics","","","",""
 "1354","Aila","McPharlain","aila.mcpharlain@brainsphere.com","2022-08-12 11:20","Brainsphere","","End User","",""
 "563","Dill","Kellert","dill.kellert@myworks.com","2022-08-12 11:20","Myworks","","Influencer","",""
