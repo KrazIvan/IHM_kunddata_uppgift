@@ -1,7 +1,13 @@
 import requests
 
-# function för att få status från Newsletters
 def få_status_newsletters():
+    '''
+    Function för att få status från Newsletters.
+
+    Output: Status från Newsletters om status-request fungerade,
+    felmeddelande om det inte fungerar.
+    
+    '''
     api_nyckeln = "70b63d7973cf57ed48c2fd9c2393b228d1db"
     base_url = "http://localhost:3001"
     status_url = f"{base_url}/status"
