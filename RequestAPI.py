@@ -13,7 +13,7 @@ def få_status_newsletters():
         data = svar.json()
         print(data)
     else:
-        # Request misslyckade
+        # Request misslyckades
         print(f"Request misslyckades: {svar.status_code}")
 
 if __name__ == "__main__":
