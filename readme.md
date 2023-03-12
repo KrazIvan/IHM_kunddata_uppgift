@@ -8,4 +8,4 @@
 
 **Konstiga filer** - Filer som jag inte är säker på vad de är till för.
 
-**Request.py** - Pythonprogram för att skicka API-requests.
+**RequestAPI.py** - Pythonprogram för att skicka API-requests.
