@@ -11,10 +11,10 @@ def få_status_newsletters():
     if svar.status_code == 200:
         # Request lyckades
         data = svar.json()
-        print(data)
+        return data
     else:
         # Request misslyckades
-        print(f"Request misslyckades: {svar.status_code}")
+        return f"Request misslyckades: {svar.status_code}"
 
 if __name__ == "__main__":
-    få_status_newsletters()
+    print(få_status_newsletters())
