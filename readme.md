@@ -9,3 +9,5 @@
 **Konstiga filer** - Filer som jag inte är säker på vad de är till för.
 
 **RequestAPI.py** - Pythonprogram för att skicka API-requests.
+
+**PythonDB** - Mapp för databaspythonprogram.
