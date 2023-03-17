@@ -1,4 +1,4 @@
-# Mappar: #
+# Innehåll: #
 
 **Datakällor** - Här ligger alla våra datakällor i varsin undermapp.
 
