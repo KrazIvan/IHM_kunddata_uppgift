@@ -10,4 +10,4 @@
 <p>&nbsp;</p>
 
 ### **PythonDB** - Mapp för databaspythonprogram:
-**RequestAPI.py** - Pythonprogram för att skicka API-requests.
+**RequestAPI.py** - Pythonprogram för att skicka API-requests och hämta data ifrån dem.
