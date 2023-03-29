@@ -1,4 +1,46 @@
 import requests
+import zeep
+
+def få_hubspot_companies(companyidn=None,
+                      antal_companies=10,
+                      hubspot_api_key="pat-na1-003cd583-9877-4c70-97ba-4c8cb7b980e0"):
+    '''
+    Function för att få företag från Hubspot companies API:t.
+
+    Parametrar:
+    hubspot_api_key (str, default: pat-na1-003cd583-9877-4c70-97ba-4c8cb7b980e0): API-nyckeln.
+    antal_companies (int, default: 10): Antalet företag att hämta.
+    kundidn (list, default: None): Lista av company-ID:n att hämta.
+
+    Output: Lista med Hubspot-företag.
+    
+    '''
+    headers = {"Authorization": "Bearer " + hubspot_api_key}
+    params = {"limit": antal_companies}
+    # För specifika deals
+    if companyidn != None:
+        companylista = []
+        for companyid in companyidn:
+            svar = requests.get(f"https://api.hubapi.com/crm/v3/objects/companies/{companyid}", headers=headers)
+            # Request lyckades
+            if svar.status_code == 200:
+                deal = svar.json()
+                companylista.append(deal)
+            # Request misslyckades   
+            else:
+                print(f"Request misslyckades: {svar.status_code}")
+        return companylista
+    # Om inga specifika företag blev efterfrågade
+    else:
+        svar = requests.get("https://api.hubapi.com/crm/v3/objects/companies", headers=headers, params=params)
+        # Request lyckades
+        if svar.status_code == 200:
+            companylista = svar.json()["results"]
+            return companylista
+        # Request misslyckades 
+        else:
+            print(f"Request misslyckades: {svar.status_code}")
+            return []
 
 def få_hubspot_deals(dealidn=None,
                       antal_deals=10,
@@ -151,48 +193,62 @@ def få_newsletters_kunder(api_nyckeln="70b63d7973cf57ed48c2fd9c2393b228d1db",
         return []
 
 
-def få_preferrence(api_nyckeln="eecd57cc228732f3f92bb9719476e3d308db",
-                              base_url="http://localhost:3002",
-                              kundnummer=None,
-                              limit=10):
-    """
-    Hämtar kommunikationsvägar för kunder från preferrence API:t.
 
-    Parametrar:
-    api_nyckeln (str, default: eecd57cc228732f3f92bb9719476e3d308db): API-nyckeln.
-    base_url (str, default: http://localhost:3002): Bas-URL för Kunders kommunikationsväg.
-    kundnummer (list, valfritt): En lista av kundnumbers av kunder för att hänta kommunikationsvägar ifrån.
-    limit (int, valfritt): Det maximala antalet kunder att hämta kommunikationsvägar för, om inga kundnummer anges.
+def få_payments(order_numbers, wsdl="http://localhost:3080/ws/bs.wsdl"):
+    client = zeep.Client(wsdl=wsdl)
 
-    Returnerar:
-    En dict över kundnummer mappade till deras kommunikationsvägar.
-    
-    """
-    url = f"{base_url}/customers/"
-    params = {"limit": limit}
-    if kundnummer:
-        params["customerNumbers"] = ",".join(str(kundnummer))
-    headers = {"x-api-key": api_nyckeln}
-    svar = requests.get(url, params=params, headers=headers)
+    paymentlista = []
+    for order_number in order_numbers:
+        try:
+            payment = client.service.getPayment(order_number)
+        except zeep.exceptions.Fault:
+            print(f"Payments Request nummer {order_number} misslyckades.")
+            continue
+        if payment != None:
+            payment_info = {
+                "orderNumber": payment["orderNumber"],
+                "amount": payment["amount"],
+                "currency": payment["currency"],
+                "method": payment["method"],
+                "status": payment["status"]
+            }
+            paymentlista.append(payment_info)
 
-    if svar.status_code == 200:
-        # Request lyckades
-        data = svar.json()
-        kommunikationsvägar = {}
-        for kund in data:
-            kommunikationsvägar[kund["customerNumber"]] = kund["CommunicationMethod"]
-        return kommunikationsvägar
-    else:
-        # Request misslyckades
-        print(f"Request failed with status code {svar.status_code}")
-        return {}
+    return paymentlista
+
+def få_credits_kunder(customer_numbers, wsdl="http://localhost:3080/ws/bs.wsdl"):
+    client = zeep.Client(wsdl=wsdl)
+
+    creditlista = []
+    for customer_number in customer_numbers:
+        try:
+            credit = client.service.getCredit(customer_number)
+        except zeep.exceptions.Fault:
+            print(f"Credits Request nummer {customer_number} misslyckades.")
+            continue
+        if credit != None:
+            credit_info = {
+                "customerNumber": credit["customerNumber"],
+                "amount": credit["amount"],
+                "currency": credit["currency"],
+            }
+            creditlista.append(credit_info)
+
+    return creditlista
 
 if __name__ == "__main__":
     # Se resultat här nere
     print(få_status_newsletters())
     print(få_newsletters_kunder(limit=5))
-    #print(få_preferrence(kundnummer=[1])) # Fortfarande konstig för mig, ska fixa
     print(få_hubspot_kunder(kundidn=[51, 1]))
     print(få_hubspot_kunder(antal_kunder=10))
     print(få_hubspot_deals(dealidn=[9801031437, 9801031438]))
     print(få_hubspot_deals(antal_deals=2))
+    print(få_hubspot_companies(companyidn=[9366363952, 9366363956]))
+    print(få_hubspot_companies(antal_companies=2))
+    print(få_payments(order_numbers=["330495", "330496", "123456", "330497", "330498", "999999"]))
+    print(få_credits_kunder(customer_numbers=["10001", "10002", "10003", "10004", "330495", "330496", "123456", "330497", "330498", "999999"]))
+    print(få_newsletters_kunder())
+    print(få_hubspot_kunder())
+    print(få_hubspot_companies())
+    print(få_hubspot_deals())
